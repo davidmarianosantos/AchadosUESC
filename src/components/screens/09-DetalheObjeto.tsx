@@ -1,0 +1,206 @@
+import React, { useState } from 'react';
+import { Header } from '../Header';
+import { Card } from '../ui/Card';
+import { Badge } from '../ui/Badge';
+import { Button } from '../ui/Button';
+import { Modal } from '../ui/Modal';
+import { MapPin, Calendar, Clock, AlertTriangle, MessageCircle } from 'lucide-react';
+import { Input } from '../ui/Input';
+
+interface DetalheObjetoProps {
+  onNavigate: (screen: string) => void;
+}
+
+export function DetalheObjeto({ onNavigate }: DetalheObjetoProps) {
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportReason, setReportReason] = useState('');
+  
+  const object = {
+    name: 'Carteira de couro preta',
+    category: 'Acessórios',
+    protocol: '#12345',
+    date: '30/11/2024',
+    time: '14:30',
+    location: 'Biblioteca Central',
+    locationDetail: 'Próximo ao balcão de empréstimos, segundo andar',
+    type: 'encontrado',
+    status: 'perdido',
+    currentLocation: 'Entregue na segurança',
+    description: 'Carteira de couro sintético na cor preta. Possui compartimento para moedas com zíper dourado. Tem um pequeno arranhão no canto inferior direito. Não possui documentos dentro, apenas alguns cartões de transporte.',
+    images: [
+      'https://images.unsplash.com/photo-1627123424574-724758594e93?w=800',
+      'https://images.unsplash.com/photo-1614260937560-c749cc17da94?w=800'
+    ],
+    timeline: [
+      { event: 'Registrado como objeto encontrado', date: '30/11/2024, 14:35' },
+      { event: 'Correspondência sugerida para 2 usuários', date: '30/11/2024, 14:36' },
+      { event: 'Usuário Maria Silva iniciou contato', date: '30/11/2024, 15:20' }
+    ]
+  };
+  
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header isLoggedIn userName="João Silva" onNavigate={onNavigate} />
+      
+      <div className="max-w-[1200px] mx-auto px-20 py-12">
+        <div className="grid grid-cols-3 gap-8">
+          {/* Coluna esquerda - Foto e info principal */}
+          <div className="col-span-2">
+            <Card className="overflow-hidden mb-6">
+              <div className="aspect-video bg-gray-200">
+                <img 
+                  src={object.images[0]} 
+                  alt={object.name} 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+              {object.images.length > 1 && (
+                <div className="p-4 flex gap-3">
+                  {object.images.map((img, idx) => (
+                    <div key={idx} className="w-20 h-20 bg-gray-200 rounded-lg overflow-hidden cursor-pointer border-2 border-transparent hover:border-[#2563EB]">
+                      <img src={img} alt={`Foto ${idx + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </Card>
+            
+            <Card className="p-6 mb-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <Badge status={object.status as any} className="mb-3">
+                    {object.type === 'encontrado' ? 'Objeto encontrado' : 'Objeto perdido'}
+                  </Badge>
+                  <h1 className="text-gray-900 mb-2">{object.name}</h1>
+                  <p className="text-gray-600">Categoria: {object.category}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="text-gray-600 text-sm mb-1">Protocolo</p>
+                  <p className="text-gray-900">{object.protocol}</p>
+                </div>
+                <div>
+                  <p className="text-gray-600 text-sm mb-1">Data de registro</p>
+                  <p className="text-gray-900">{object.date} às {object.time}</p>
+                </div>
+                <div className="col-span-2">
+                  <div className="flex items-start gap-2">
+                    <MapPin size={18} className="text-gray-600 mt-0.5" />
+                    <div>
+                      <p className="text-gray-600 text-sm">Local {object.type === 'encontrado' ? 'encontrado' : 'provável da perda'}</p>
+                      <p className="text-gray-900">{object.location}</p>
+                      {object.locationDetail && (
+                        <p className="text-gray-600 text-sm mt-1">{object.locationDetail}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {object.type === 'encontrado' && (
+                  <div className="col-span-2">
+                    <p className="text-gray-600 text-sm mb-1">Objeto está em</p>
+                    <p className="text-gray-900">{object.currentLocation}</p>
+                  </div>
+                )}
+              </div>
+              
+              <div>
+                <h3 className="text-gray-900 mb-2">Descrição</h3>
+                <p className="text-gray-700 leading-relaxed">{object.description}</p>
+              </div>
+            </Card>
+            
+            {/* Histórico */}
+            <Card className="p-6">
+              <h3 className="text-gray-900 mb-4">Histórico de status</h3>
+              <div className="space-y-4">
+                {object.timeline.map((item, idx) => (
+                  <div key={idx} className="flex gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Clock size={16} className="text-[#2563EB]" />
+                      </div>
+                      {idx < object.timeline.length - 1 && (
+                        <div className="w-0.5 h-full bg-gray-200 mt-2" />
+                      )}
+                    </div>
+                    <div className="flex-1 pb-6">
+                      <p className="text-gray-900">{item.event}</p>
+                      <p className="text-gray-500 text-sm mt-1">{item.date}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
+          
+          {/* Coluna direita - Contato */}
+          <div className="col-span-1">
+            <Card className="p-6 sticky top-24">
+              <h3 className="text-gray-900 mb-4">Informações de contato</h3>
+              
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-6">
+                <p className="text-sm text-gray-700">
+                  O contato será realizado por mensagens internas. Seus dados pessoais serão preservados.
+                </p>
+              </div>
+              
+              <div className="space-y-3 mb-6">
+                <Button 
+                  variant="primary" 
+                  className="w-full"
+                  onClick={() => onNavigate('messages')}
+                >
+                  <MessageCircle size={18} />
+                  Acho que este objeto é meu
+                </Button>
+              </div>
+              
+              <hr className="border-gray-200 my-6" />
+              
+              <button
+                onClick={() => setShowReportModal(true)}
+                className="flex items-center gap-2 text-gray-600 hover:text-[#DC2626] transition-colors text-sm"
+              >
+                <AlertTriangle size={16} />
+                Denunciar este registro
+              </button>
+            </Card>
+          </div>
+        </div>
+      </div>
+      
+      {/* Modal de denúncia */}
+      <Modal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        title="Denunciar registro"
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setShowReportModal(false)}>
+              Cancelar
+            </Button>
+            <Button variant="danger" onClick={() => setShowReportModal(false)}>
+              Enviar denúncia
+            </Button>
+          </>
+        }
+      >
+        <div className="space-y-4">
+          <p className="text-gray-700">
+            Por favor, descreva o motivo da denúncia. Nossa equipe irá revisar este registro.
+          </p>
+          <Input
+            label="Motivo da denúncia"
+            multiline
+            rows={4}
+            placeholder="Descreva o problema..."
+            value={reportReason}
+            onChange={(e) => setReportReason(e.target.value)}
+          />
+        </div>
+      </Modal>
+    </div>
+  );
+}
