@@ -30,21 +30,21 @@ export function AdminDashboard({ onNavigate }: AdminDashboardProps) {
       type: 'denúncia',
       title: 'Denúncia sobre objeto #12340',
       description: 'Usuário reportou informações suspeitas',
-      date: '30/11/2024'
+      date: '30/11/2025'
     },
     {
       id: 2,
       type: 'validação',
       title: 'Objeto aguardando validação #12339',
       description: 'Documento com foto sensível',
-      date: '29/11/2024'
+      date: '29/11/2025'
     },
     {
       id: 3,
       type: 'denúncia',
       title: 'Denúncia sobre objeto #12335',
       description: 'Possível duplicação de registro',
-      date: '28/11/2024'
+      date: '28/11/2025'
     }
   ];
   

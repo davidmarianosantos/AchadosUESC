@@ -55,7 +55,7 @@ export function Mensagens({ onNavigate }: MensagensProps) {
     ],
     2: [
       { id: 1, sender: 'other', senderName: 'Carlos Pereira', text: 'Obrigado por avisar sobre a mochila!', time: 'Ontem' },
-      { id: 2, sender: 'me', text: 'Disponha! Ela está na recepção do PPC.', time: 'Ontem' }
+      { id: 2, sender: 'me', text: 'Disponha! Ela está na cantina do Adonias.', time: 'Ontem' }
     ],
     3: [
       { id: 1, sender: 'other', senderName: 'Fernanda Rocha', text: 'Você pode me enviar mais fotos do fone?', time: '28/11' }

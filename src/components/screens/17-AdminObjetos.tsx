@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
-import { Header } from '../Header';
-import { AdminSidebar } from '../AdminSidebar';
-import { Card } from '../ui/Card';
-import { Badge } from '../ui/Badge';
-import { Button } from '../ui/Button';
-import { Filter, Download, MoreVertical, Edit, Archive } from 'lucide-react';
+import React, { useState } from "react";
+import { Header } from "../Header";
+import { AdminSidebar } from "../AdminSidebar";
+import { Card } from "../ui/Card";
+import { Badge } from "../ui/Badge";
+import { Button } from "../ui/Button";
+import {
+  Filter,
+  Download,
+  MoreVertical,
+  Edit,
+  Archive,
+} from "lucide-react";
 
 interface AdminObjetosProps {
   onNavigate: (screen: string) => void;
@@ -14,30 +20,28 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
   const [showFilters, setShowFilters] = useState(true);
   const [showMenu, setShowMenu] = useState<number | null>(null);
 
-  // Estados dos filtros
+  // estados filtro
   const [fTipo, setFTipo] = useState("Todos");
   const [fStatus, setFStatus] = useState("Todos");
   const [fLocal, setFLocal] = useState("Todos");
   const [fCat, setFCat] = useState("Todos");
 
   const objects = [
-    { id: 12345, name: 'Carteira de couro preta', type: 'Encontrado', location: 'Biblioteca Central', status: 'perdido', date: '30/11/2024', category: 'Acessórios' },
-    { id: 12344, name: 'Mochila azul marinho', type: 'Encontrado', location: 'Pavilhão Pedro Calmon', status: 'correspondencia', date: '29/11/2024', category: 'Acessórios' },
-    { id: 12343, name: 'Chave de carro Toyota', type: 'Perdido', location: 'Estacionamento', status: 'perdido', date: '29/11/2024', category: 'Outros' },
-    { id: 12342, name: 'Caderno de Física', type: 'Encontrado', location: 'CEU', status: 'em-processo', date: '28/11/2024', category: 'Materiais acadêmicos' },
-    { id: 12341, name: 'Fone de ouvido Bluetooth', type: 'Perdido', location: 'Cantina', status: 'perdido', date: '27/11/2024', category: 'Eletrônicos' },
-    { id: 12340, name: 'Carteirinha de estudante', type: 'Encontrado', location: 'Reitoria', status: 'devolvido', date: '26/11/2024', category: 'Documentos' }
+    { id: 12345, name: "Carteira de couro preta", type: "Encontrado", location: "Biblioteca Central", status: "perdido", date: "30/11/2025", category: "Acessórios" },
+    { id: 12344, name: "Mochila azul marinho", type: "Encontrado", location: "Pavilhão Pedro Calmon", status: "correspondencia", date: "29/11/2025", category: "Acessórios" },
+    { id: 12343, name: "Chave de carro Toyota", type: "Perdido", location: "Estacionamento", status: "perdido", date: "29/11/2025", category: "Outros" },
+    { id: 12342, name: "Caderno de Física", type: "Encontrado", location: "CEU", status: "em-processo", date: "28/11/2025", category: "Materiais acadêmicos" },
+    { id: 12341, name: "Fone de ouvido Bluetooth", type: "Perdido", location: "Cantina", status: "perdido", date: "27/11/2025", category: "Eletrônicos" },
+    { id: 12340, name: "Carteirinha de estudante", type: "Encontrado", location: "Reitoria", status: "devolvido", date: "26/11/2025", category: "Documentos" },
   ];
 
-  // Filtro REAL
-  const filteredObjects = objects.filter(obj => {
+  const filteredObjects = objects.filter((obj) => {
     return (
       (fTipo === "Todos" || obj.type === fTipo) &&
       (fStatus === "Todos" ||
         (fStatus === "Em aberto" && obj.status === "perdido") ||
         (fStatus === "Em processo" && obj.status === "em-processo") ||
-        (fStatus === "Devolvido" && obj.status === "devolvido")
-      ) &&
+        (fStatus === "Devolvido" && obj.status === "devolvido")) &&
       (fLocal === "Todos" || obj.location === fLocal) &&
       (fCat === "Todos" || obj.category === fCat)
     );
@@ -50,9 +54,10 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
       <div className="flex">
         <AdminSidebar activeScreen="admin-objects" onNavigate={onNavigate} />
 
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-8 pb-50">
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-gray-900">Gestão de Objetos</h1>
+
             <Button variant="secondary">
               <Download size={18} />
               Exportar relatório (CSV)
@@ -83,7 +88,7 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm"
                     value={fTipo}
-                    onChange={e => setFTipo(e.target.value)}
+                    onChange={(e) => setFTipo(e.target.value)}
                   >
                     <option>Todos</option>
                     <option>Perdido</option>
@@ -97,7 +102,7 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm"
                     value={fStatus}
-                    onChange={e => setFStatus(e.target.value)}
+                    onChange={(e) => setFStatus(e.target.value)}
                   >
                     <option>Todos</option>
                     <option>Em aberto</option>
@@ -112,7 +117,7 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm"
                     value={fLocal}
-                    onChange={e => setFLocal(e.target.value)}
+                    onChange={(e) => setFLocal(e.target.value)}
                   >
                     <option>Todos</option>
                     <option>Biblioteca Central</option>
@@ -130,7 +135,7 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
                   <select
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-sm"
                     value={fCat}
-                    onChange={e => setFCat(e.target.value)}
+                    onChange={(e) => setFCat(e.target.value)}
                   >
                     <option>Todos</option>
                     <option>Eletrônicos</option>
@@ -144,54 +149,52 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
             )}
           </Card>
 
-          {/* TABELA */}
-          <Card className="overflow-hidden">
+          {/* TABELA COM MENU FUNCIONANDO */}
+          <Card className="overflow-visible relative">
             <table className="w-full table-fixed">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-4 text-left text-gray-900 w-28">Protocolo</th>
-                  <th className="px-6 py-4 text-left text-gray-900 w-60">Nome do objeto</th>
-                  <th className="px-6 py-4 text-left text-gray-900 w-32">Tipo</th>
-                  <th className="px-6 py-4 text-left text-gray-900 w-48">Local</th>
-                  <th className="px-6 py-4 text-left text-gray-900 w-32">Status</th>
-                  <th className="px-6 py-4 text-left text-gray-900 w-28">Data</th>
-                  <th className="px-6 py-4 text-right text-gray-900 w-32">Ações</th>
+                  <th className="w-[110px] px-6 py-4 text-left text-gray-900">Protocolo</th>
+                  <th className="w-[260px] px-6 py-4 text-left text-gray-900">Nome do objeto</th>
+                  <th className="w-[120px] px-6 py-4 text-left text-gray-900">Tipo</th>
+                  <th className="w-[180px] px-6 py-4 text-left text-gray-900">Local</th>
+                  <th className="w-[130px] px-6 py-4 text-left text-gray-900">Status</th>
+                  <th className="w-[120px] px-6 py-4 text-left text-gray-900">Data</th>
+                  <th className="w-[120px] px-6 py-4 text-right text-gray-900">Ações</th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-gray-200">
-                {/* Caso nenhum objeto seja encontrado */}
                 {filteredObjects.length === 0 && (
                   <tr>
-                    <td
-                      colSpan={7}
-                      className="text-center py-12 text-gray-500 text-sm"
-                    >
+                    <td colSpan={7} className="text-center py-12 text-gray-500 text-sm">
                       Nenhum objeto encontrado com os filtros selecionados.
                     </td>
                   </tr>
                 )}
 
-                {filteredObjects.map(obj => (
-                  <tr key={obj.id} className="hover:bg-gray-50 transition-colors">
+                {filteredObjects.map((obj) => (
+                  <tr key={obj.id} className="hover:bg-gray-50 transition-colors relative">
+                    <td className="px-6 py-4 text-gray-900 whitespace-nowrap">#{obj.id}</td>
 
-                    <td className="px-6 py-4 text-gray-900">#{obj.id}</td>
-
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <p className="text-gray-900">{obj.name}</p>
-                      <p className="text-gray-500 text-sm">{obj.category}</p>
+                      <p className="text-gray-500 text-sm -mt-1">{obj.category}</p>
                     </td>
 
-                    <td className="px-6 py-4">
-                      <Badge status={obj.type === "Perdido" ? "perdido" : "encontrado"}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <Badge
+                        status={obj.type === "Perdido" ? "perdido" : "encontrado"}
+                        className="whitespace-nowrap px-3 py-1 text-sm"
+                      >
                         {obj.type}
                       </Badge>
                     </td>
 
-                    <td className="px-6 py-4 text-gray-700">{obj.location}</td>
+                    <td className="px-6 py-4 text-gray-700 whitespace-nowrap">{obj.location}</td>
 
-                    <td className="px-6 py-4">
-                      <Badge status={obj.status as any}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <Badge status={obj.status as any} className="whitespace-nowrap px-3 py-1 text-sm">
                         {obj.status === "perdido" && "Em aberto"}
                         {obj.status === "correspondencia" && "Correspondência"}
                         {obj.status === "em-processo" && "Em processo"}
@@ -199,26 +202,30 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
                       </Badge>
                     </td>
 
-                    <td className="px-6 py-4 text-gray-600">{obj.date}</td>
+                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">{obj.date}</td>
 
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">
-
-                        <Button size="sm" variant="secondary" onClick={() => onNavigate('object-detail')}>
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => onNavigate("object-detail")}
+                        >
                           Ver
                         </Button>
 
                         <div className="relative">
                           <button
-                            onClick={() => setShowMenu(showMenu === obj.id ? null : obj.id)}
+                            onClick={() =>
+                              setShowMenu(showMenu === obj.id ? null : obj.id)
+                            }
                             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                           >
                             <MoreVertical size={16} className="text-gray-600" />
                           </button>
 
                           {showMenu === obj.id && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
-
+                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                               <button className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2 text-gray-700">
                                 <Edit size={16} />
                                 Editar
@@ -232,14 +239,11 @@ export function AdminObjetos({ onNavigate }: AdminObjetosProps) {
                                 <Archive size={16} />
                                 Arquivar
                               </button>
-
                             </div>
                           )}
                         </div>
-
                       </div>
                     </td>
-
                   </tr>
                 ))}
               </tbody>

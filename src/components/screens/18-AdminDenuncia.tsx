@@ -19,7 +19,7 @@ export function AdminDenuncia({ onNavigate }: AdminDenunciaProps) {
   
   const report = {
     id: '0001',
-    date: '30/11/2024, 10:45',
+    date: '30/11/2025, 10:45',
     reporter: {
       name: 'Pedro Santos',
       email: 'pedro.santos@uesc.br',
@@ -31,7 +31,7 @@ export function AdminDenuncia({ onNavigate }: AdminDenunciaProps) {
       category: 'Acessórios',
       type: 'Encontrado',
       location: 'Biblioteca Central',
-      date: '30/11/2024',
+      date: '30/11/2025',
       status: 'perdido',
       image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400',
       owner: {
@@ -61,7 +61,7 @@ export function AdminDenuncia({ onNavigate }: AdminDenunciaProps) {
       <Header isLoggedIn isAdmin userName="Admin" onNavigate={onNavigate} />
       
       <div className="flex">
-        <AdminSidebar activeScreen="admin-reports-detail" onNavigate={onNavigate} />
+        <AdminSidebar activeScreen="admin-report-detail" onNavigate={onNavigate} />
         
         <main className="flex-1 p-8">
           <div className="flex items-center gap-3 mb-8">

@@ -16,7 +16,7 @@ export function EditarObjeto({ onNavigate }: EditarObjetoProps) {
     name: 'Carteira de couro preta',
     location: 'Biblioteca Central',
     locationDetail: 'Próximo ao balcão de empréstimos',
-    date: '2024-11-30',
+    date: '2025-11-30',
     time: '14:30',
     description: 'Carteira de couro sintético na cor preta. Possui compartimento para moedas com zíper dourado.',
     currentLocation: 'Entregue na segurança',

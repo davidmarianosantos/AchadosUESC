@@ -16,7 +16,6 @@ export function Perfil({ onNavigate }: PerfilProps) {
   const [userData, setUserData] = useState({
     name: 'João Silva',
     email: 'joao.silva@uesc.br',
-    cpf: '123.456.789-00',
     userType: 'aluno'
   });
   
@@ -87,17 +86,6 @@ export function Perfil({ onNavigate }: PerfilProps) {
                 </p>
               </div>
               
-              <div>
-                <Input
-                  label="CPF"
-                  type="text"
-                  value={userData.cpf}
-                  disabled
-                />
-                <p className="text-gray-500 text-sm mt-1">
-                  O CPF não pode ser alterado
-                </p>
-              </div>
               
               <div>
                 <label className="block text-gray-700 mb-2">

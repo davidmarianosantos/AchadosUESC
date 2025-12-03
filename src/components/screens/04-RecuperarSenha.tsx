@@ -18,7 +18,7 @@ export function RecuperarSenha({ onNavigate }: RecuperarSenhaProps) {
     e.preventDefault();
     
     if (!email) {
-      setError('E-mail ou CPF é obrigatório');
+      setError('E-mail é obrigatório');
       return;
     }
     
@@ -57,16 +57,16 @@ export function RecuperarSenha({ onNavigate }: RecuperarSenhaProps) {
         <div className="text-center mb-8">
           <h1 className="text-gray-900 mb-2">Recuperar senha</h1>
           <p className="text-gray-600">
-            Informe seu e-mail institucional ou CPF para receber instruções de recuperação
+            Informe seu e-mail institucional para receber instruções de recuperação
           </p>
         </div>
         
         <Card className="p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input
-              label="E-mail institucional ou CPF"
+              label="E-mail institucional"
               type="text"
-              placeholder="exemplo@uesc.br ou 000.000.000-00"
+              placeholder="exemplo@uesc.br"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               error={error}
