@@ -100,7 +100,7 @@ export default function App() {
       {/* Navegação rápida para desenvolvimento */}
       <div className="fixed bottom-6 left-6 z-50">
         <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-xs">
-          <p className="text-xs text-gray-600 mb-3">Navegação rápida (dev):</p>
+          <p className="text-xs text-gray-600 mb-3">Navegação rápida:</p>
           <div className="space-y-1">
             <select 
               value={currentScreen}
