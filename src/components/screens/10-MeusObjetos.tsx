@@ -4,17 +4,18 @@ import { Card } from '../ui/Card';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
-import { MoreVertical, Edit, Trash2, CheckCircle, Search } from 'lucide-react';
+import { MoreVertical, Edit, Trash2, CheckCircle, Search, Eye } from 'lucide-react';
 
 interface MeusObjetosProps {
   onNavigate: (screen: string) => void;
 }
 
-export function MeusObjetos({ onNavigate }: MeuesObjetosProps) {
+export function MeusObjetos({ onNavigate }: MeusObjetosProps) {
   const [activeTab, setActiveTab] = useState<'todos' | 'perdidos' | 'encontrados'>('todos');
   const [showMenu, setShowMenu] = useState<number | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedObject, setSelectedObject] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false); // Estado de loading
 
   const objects = [
     {
@@ -63,15 +64,21 @@ export function MeusObjetos({ onNavigate }: MeuesObjetosProps) {
   });
 
   const handleDelete = () => {
-    setShowDeleteModal(false);
-    setSelectedObject(null);
+    setIsDeleting(true); // Inicia loading
+    
+    // Simula deleção do banco de dados (1.5s)
+    setTimeout(() => {
+      console.log("Objeto deletado:", selectedObject);
+      setIsDeleting(false); // Para loading
+      setShowDeleteModal(false);
+      setSelectedObject(null);
+    }, 1500);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header isLoggedIn userName="João Silva" onNavigate={onNavigate} />
 
-      {/* AUMENTEI A LARGURA TOTAL */}
       <div className="max-w-[1300px] mx-auto px-10 py-10">
 
         <h1 className="text-gray-900 mb-6">Meus objetos</h1>
@@ -97,28 +104,27 @@ export function MeusObjetos({ onNavigate }: MeuesObjetosProps) {
         </div>
 
         {filteredObjects.length > 0 ? (
-          <Card className="overflow-hidden">
+          <Card className="overflow-visible">
 
-            {/* TABLE FIXA E LARGA */}
             <table className="w-full table-fixed">
 
               <colgroup>
-                <col className="w-[28%]" />
-                <col className="w-[12%]" />
-                <col className="w-[20%]" />
-                <col className="w-[14%]" />
-                <col className="w-[14%]" />
-                <col className="w-[12%]" />
+                <col className="w-[24%]" /> {/* Objeto */}
+                <col className="w-[10%]" /> {/* Tipo */}
+                <col className="w-[18%]" /> {/* Local */}
+                <col className="w-[12%]" /> {/* Data */}
+                <col className="w-[14%]" /> {/* Status */}
+                <col className="w-[22%]" /> {/* Ações Centralizadas */}
               </colgroup>
 
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-gray-900">Objeto</th>
-                  <th className="px-6 py-3 text-left text-gray-900">Tipo</th>
-                  <th className="px-6 py-3 text-left text-gray-900">Local</th>
-                  <th className="px-6 py-3 text-left text-gray-900">Data</th>
-                  <th className="px-6 py-3 text-left text-gray-900">Status</th>
-                  <th className="px-6 py-3 text-right text-gray-900">Ações</th>
+                  <th className="px-6 py-3 text-left text-gray-900 font-semibold">Objeto</th>
+                  <th className="px-6 py-3 text-left text-gray-900 font-semibold">Tipo</th>
+                  <th className="px-6 py-3 text-left text-gray-900 font-semibold">Local</th>
+                  <th className="px-6 py-3 text-left text-gray-900 font-semibold">Data</th>
+                  <th className="px-6 py-3 text-left text-gray-900 font-semibold">Status</th>
+                  <th className="px-6 py-3 text-center text-gray-900 font-semibold">Ações</th>
                 </tr>
               </thead>
 
@@ -126,74 +132,72 @@ export function MeusObjetos({ onNavigate }: MeuesObjetosProps) {
                 {filteredObjects.map((obj) => (
                   <tr key={obj.id} className="hover:bg-gray-50">
 
-                    {/* OBJETO */}
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 align-middle">
                       <div className="flex flex-col leading-tight">
-                        <span className="text-gray-900 whitespace-nowrap">{obj.name}</span>
+                        <span className="text-gray-900 font-medium truncate" title={obj.name}>{obj.name}</span>
                         <span className="text-gray-500 text-sm whitespace-nowrap">
                           {obj.protocol}
                         </span>
                       </div>
                     </td>
 
-                    {/* TIPO */}
-                    <td className="px-6 py-4">
-                      <Badge status={obj.type} className="px-3 py-1 text-sm whitespace-nowrap">
+                    <td className="px-6 py-4 align-middle">
+                      <Badge status={obj.type as any} className="whitespace-nowrap">
                         {obj.type === 'perdido' ? 'Perdido' : 'Encontrado'}
                       </Badge>
                     </td>
 
-                    {/* LOCAL */}
-                    <td className="px-6 py-4 text-gray-700 whitespace-nowrap">{obj.location}</td>
+                    <td className="px-6 py-4 text-gray-700 truncate align-middle" title={obj.location}>
+                        {obj.location}
+                    </td>
 
-                    {/* DATA */}
-                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap">{obj.date}</td>
+                    <td className="px-6 py-4 text-gray-600 whitespace-nowrap align-middle">{obj.date}</td>
 
-                    {/* STATUS */}
-                    <td className="px-6 py-4">
-                      <Badge status={obj.status} className="px-3 py-1 text-sm whitespace-nowrap">
+                    <td className="px-6 py-4 align-middle">
+                      <Badge status={obj.status as any} className="whitespace-nowrap">
                         {obj.status === 'perdido' && 'Em aberto'}
                         {obj.status === 'em-processo' && 'Em processo'}
                         {obj.status === 'devolvido' && 'Devolvido'}
                       </Badge>
                     </td>
 
-                    {/* AÇÕES */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-3">
+                    {/* AÇÕES CENTRALIZADAS */}
+                    <td className="px-6 py-4 align-middle">
+                      <div className="flex items-center justify-center gap-2 w-full">
 
                         <Button
                           size="sm"
                           variant="secondary"
-                          className="whitespace-nowrap"
+                          className="whitespace-nowrap flex items-center gap-1"
                           onClick={() => onNavigate('object-detail')}
                         >
-                          Ver detalhes
+                          <Eye size={16} />
+                          <span className="hidden xl:inline">Detalhes</span>
+                          <span className="xl:hidden">Ver</span>
                         </Button>
 
                         {obj.status !== 'devolvido' && (
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="!p-2"
+                            className="!p-2 text-gray-600 hover:text-blue-600"
                             onClick={() => onNavigate('edit-object')}
+                            title="Editar"
                           >
                             <Edit size={18} />
                           </Button>
                         )}
 
-                        {/* MENU */}
                         <div className="relative">
                           <button
                             onClick={() => setShowMenu(showMenu === obj.id ? null : obj.id)}
-                            className="p-2 hover:bg-gray-100 rounded-lg"
+                            className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors"
                           >
-                            <MoreVertical size={18} className="text-gray-600" />
+                            <MoreVertical size={18} />
                           </button>
 
                           {showMenu === obj.id && (
-                            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
-
+                            <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 text-left">
                               {obj.status !== 'devolvido' && (
                                 <button
                                   onClick={() => setShowMenu(null)}
@@ -215,7 +219,6 @@ export function MeusObjetos({ onNavigate }: MeuesObjetosProps) {
                                 <Trash2 size={16} />
                                 Excluir registro
                               </button>
-
                             </div>
                           )}
                         </div>
@@ -251,17 +254,16 @@ export function MeusObjetos({ onNavigate }: MeuesObjetosProps) {
         )}
       </div>
 
-      {/* MODAL */}
       <Modal
         isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
+        onClose={() => !isDeleting && setShowDeleteModal(false)}
         title="Excluir registro"
         footer={
           <>
-            <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            <Button variant="secondary" onClick={() => setShowDeleteModal(false)} disabled={isDeleting}>
               Cancelar
             </Button>
-            <Button variant="danger" onClick={handleDelete}>
+            <Button variant="danger" onClick={handleDelete} isLoading={isDeleting}>
               Excluir
             </Button>
           </>

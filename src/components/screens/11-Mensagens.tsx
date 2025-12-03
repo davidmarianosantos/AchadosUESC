@@ -12,6 +12,7 @@ export function Mensagens({ onNavigate }: MensagensProps) {
   const [selectedConversation, setSelectedConversation] = useState(1);
   const [newMessage, setNewMessage] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isSending, setIsSending] = useState(false); // Estado de loading
 
   // 📎 Estado do arquivo anexado
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
@@ -68,20 +69,25 @@ export function Mensagens({ onNavigate }: MensagensProps) {
 
   const currentMessages = chatMessages[selectedConversation];
 
-  // 📩 Enviar mensagem
+  // 📩 Enviar mensagem com Delay
   const handleSend = () => {
-    if (!newMessage.trim() && !attachedFile) return;
+    if ((!newMessage.trim() && !attachedFile) || isSending) return;
 
-    currentMessages.push({
-      id: currentMessages.length + 1,
-      sender: 'me',
-      text: newMessage.trim() || '(Arquivo enviado)',
-      file: attachedFile || null,
-      time: 'Agora'
-    });
+    setIsSending(true);
 
-    setNewMessage('');
-    setAttachedFile(null); // limpa o arquivo enviado
+    setTimeout(() => {
+      currentMessages.push({
+        id: currentMessages.length + 1,
+        sender: 'me',
+        text: newMessage.trim() || '(Arquivo enviado)',
+        file: attachedFile || null,
+        time: 'Agora'
+      });
+
+      setNewMessage('');
+      setAttachedFile(null);
+      setIsSending(false);
+    }, 1000); // 1 segundo de "envio"
   };
 
   // 📎 Abrir seletor de arquivos
@@ -226,7 +232,6 @@ export function Mensagens({ onNavigate }: MensagensProps) {
                   className="hidden"
                 />
 
-                {/* Nome do arquivo */}
                 {attachedFile && (
                   <span className="text-sm text-gray-600">
                     📎 {attachedFile.name}
@@ -245,10 +250,16 @@ export function Mensagens({ onNavigate }: MensagensProps) {
                   placeholder="Digite sua mensagem..."
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-lg resize-none"
                   rows={2}
+                  disabled={isSending}
                 />
 
-                <Button variant="primary" onClick={handleSend} disabled={!newMessage.trim() && !attachedFile}>
-                  <Send size={18} /> Enviar
+                <Button 
+                  variant="primary" 
+                  onClick={handleSend} 
+                  disabled={(!newMessage.trim() && !attachedFile) || isSending}
+                  isLoading={isSending}
+                >
+                  {!isSending && <Send size={18} />} {!isSending && 'Enviar'}
                 </Button>
               </div>
 

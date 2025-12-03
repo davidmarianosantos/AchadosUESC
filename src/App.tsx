@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Telas públicas
 import { Landing } from './components/screens/01-Landing';
@@ -21,43 +21,76 @@ import { Onboarding } from './components/screens/15-Onboarding';
 
 // Telas de admin
 import { AdminDashboard } from './components/screens/16-AdminDashboard';
-import {AdminObjetos} from './components/screens/17-AdminObjetos';
+import { AdminObjetos } from './components/screens/17-AdminObjetos';
 import { AdminDenuncia } from './components/screens/18-AdminDenuncia';
 import { AdminRelatorios } from './components/screens/19-AdminRelatorios';
 import { AdminUsuarios } from './components/screens/20-AdminUsuarios';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('landing');
+
+  // 1. Função inteligente de navegação
+  // Ela atualiza o React E avisa o navegador (cria histórico)
+  const handleNavigate = (screen: string) => {
+    setCurrentScreen(screen);
+    // Adiciona uma entrada no histórico do navegador
+    // Isso cria URLs como: http://localhost:5173/?screen=dashboard
+    window.history.pushState({ screen }, '', `?screen=${screen}`);
+    window.scrollTo(0, 0); // Rola para o topo ao trocar de tela
+  };
+
+  // 2. Escuta o botão "Voltar" do navegador
+  useEffect(() => {
+    // Se o usuário recarregar a página, lê a URL para saber onde estava
+    const params = new URLSearchParams(window.location.search);
+    const initialScreen = params.get('screen');
+    if (initialScreen) {
+      setCurrentScreen(initialScreen);
+    }
+
+    // Função que roda quando o usuário clica em "Voltar" ou "Avançar"
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state && event.state.screen) {
+        setCurrentScreen(event.state.screen);
+      } else {
+        // Se acabou o histórico do app, volta para a landing
+        setCurrentScreen('landing');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
   
   const screens: Record<string, React.ReactNode> = {
     // Públicas (01-04)
-    'landing': <Landing onNavigate={setCurrentScreen} />,
-    'login': <Login onNavigate={setCurrentScreen} />,
-    'signup': <Cadastro onNavigate={setCurrentScreen} />,
-    'forgot-password': <RecuperarSenha onNavigate={setCurrentScreen} />,
+    'landing': <Landing onNavigate={handleNavigate} />,
+    'login': <Login onNavigate={handleNavigate} />,
+    'signup': <Cadastro onNavigate={handleNavigate} />,
+    'forgot-password': <RecuperarSenha onNavigate={handleNavigate} />,
     
     // Usuário (05-15)
-    'dashboard': <Dashboard onNavigate={setCurrentScreen} />,
-    'home': <Dashboard onNavigate={setCurrentScreen} />,
-    'register-found': <RegistrarEncontrado onNavigate={setCurrentScreen} />,
-    'register-lost': <RegistrarPerdido onNavigate={setCurrentScreen} />,
-    'search': <BuscarObjetos onNavigate={setCurrentScreen} />,
-    'object-detail': <DetalheObjeto onNavigate={setCurrentScreen} />,
-    'my-objects': <MeusObjetos onNavigate={setCurrentScreen} />,
-    'messages': <Mensagens onNavigate={setCurrentScreen} />,
-    'edit-object': <EditarObjeto onNavigate={setCurrentScreen} />,
-    'profile': <Perfil onNavigate={setCurrentScreen} />,
-    'help': <Ajuda onNavigate={setCurrentScreen} />,
-    'onboarding': <Onboarding onNavigate={setCurrentScreen} />,
+    'dashboard': <Dashboard onNavigate={handleNavigate} />,
+    'home': <Dashboard onNavigate={handleNavigate} />,
+    'register-found': <RegistrarEncontrado onNavigate={handleNavigate} />,
+    'register-lost': <RegistrarPerdido onNavigate={handleNavigate} />,
+    'search': <BuscarObjetos onNavigate={handleNavigate} />,
+    'object-detail': <DetalheObjeto onNavigate={handleNavigate} />,
+    'my-objects': <MeusObjetos onNavigate={handleNavigate} />,
+    'messages': <Mensagens onNavigate={handleNavigate} />,
+    'edit-object': <EditarObjeto onNavigate={handleNavigate} />,
+    'profile': <Perfil onNavigate={handleNavigate} />,
+    'help': <Ajuda onNavigate={handleNavigate} />,
+    'onboarding': <Onboarding onNavigate={handleNavigate} />,
     
     // Admin (16-20)
-    'admin-dashboard': <AdminDashboard onNavigate={setCurrentScreen} />,
-    'admin-objects': <AdminObjetos onNavigate={setCurrentScreen} />,
-    'admin-report-detail': <AdminDenuncia onNavigate={setCurrentScreen} />,
-    'admin-reports': <AdminRelatorios onNavigate={setCurrentScreen} />,
-    'admin-users': <AdminUsuarios onNavigate={setCurrentScreen} />,
-    'admin-reports-list': <AdminDashboard onNavigate={setCurrentScreen} />,
-    'admin-settings': <AdminDashboard onNavigate={setCurrentScreen} />
+    'admin-dashboard': <AdminDashboard onNavigate={handleNavigate} />,
+    'admin-objects': <AdminObjetos onNavigate={handleNavigate} />,
+    'admin-report-detail': <AdminDenuncia onNavigate={handleNavigate} />,
+    'admin-reports': <AdminRelatorios onNavigate={handleNavigate} />,
+    'admin-users': <AdminUsuarios onNavigate={handleNavigate} />,
+    'admin-reports-list': <AdminDashboard onNavigate={handleNavigate} />,
+    'admin-settings': <AdminDashboard onNavigate={handleNavigate} />
   };
   
   return (
@@ -71,7 +104,8 @@ export default function App() {
           <div className="space-y-1">
             <select 
               value={currentScreen}
-              onChange={(e) => setCurrentScreen(e.target.value)}
+              // Importante: Usar handleNavigate aqui também para criar histórico
+              onChange={(e) => handleNavigate(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
             >
               <optgroup label="Telas Públicas (01-04)">

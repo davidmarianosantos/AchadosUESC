@@ -13,6 +13,10 @@ export function Perfil({ onNavigate }: PerfilProps) {
   const [activeTab, setActiveTab] = useState<'dados' | 'preferencias'>('dados');
   const [showToast, setShowToast] = useState(false);
   
+  // NOVOS ESTADOS DE LOADING
+  const [isSavingData, setIsSavingData] = useState(false);
+  const [isSavingPrefs, setIsSavingPrefs] = useState(false);
+  
   const [userData, setUserData] = useState({
     name: 'João Silva',
     email: 'joao.silva@uesc.br',
@@ -28,12 +32,25 @@ export function Perfil({ onNavigate }: PerfilProps) {
   
   const handleSaveData = (e: React.FormEvent) => {
     e.preventDefault();
-    setShowToast(true);
+    setIsSavingData(true); // Começa a carregar
+    
+    // Simula delay de rede (1.5s)
+    setTimeout(() => {
+      setIsSavingData(false); // Para de carregar
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    }, 1500);
   };
   
   const handleSavePreferences = (e: React.FormEvent) => {
     e.preventDefault();
-    setShowToast(true);
+    setIsSavingPrefs(true); // Começa a carregar
+    
+    setTimeout(() => {
+      setIsSavingPrefs(false); // Para de carregar
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
+    }, 1000);
   };
   
   return (
@@ -104,7 +121,7 @@ export function Perfil({ onNavigate }: PerfilProps) {
               </div>
               
               <div className="flex justify-end pt-4 border-t border-gray-200">
-                <Button type="submit" variant="primary">
+                <Button type="submit" variant="primary" isLoading={isSavingData}>
                   Salvar alterações
                 </Button>
               </div>
@@ -116,6 +133,7 @@ export function Perfil({ onNavigate }: PerfilProps) {
         {activeTab === 'preferencias' && (
           <Card className="p-8">
             <form onSubmit={handleSavePreferences} className="space-y-8">
+              {/* ... (Conteúdo do formulário igual ao anterior) ... */}
               <div>
                 <h3 className="text-gray-900 mb-4">Notificações</h3>
                 <div className="space-y-4">
@@ -187,9 +205,9 @@ export function Perfil({ onNavigate }: PerfilProps) {
                   </label>
                 </div>
               </div>
-              
+
               <div className="flex justify-end pt-4 border-t border-gray-200">
-                <Button type="submit" variant="primary">
+                <Button type="submit" variant="primary" isLoading={isSavingPrefs}>
                   Salvar preferências
                 </Button>
               </div>
